@@ -1,6 +1,11 @@
 目前只做了直播功能（要不要加普通视频的功能还没想好）
 
 说明
+- 不传视频地址的话则只渲染封面图
+- 有提供加载失败的占位插槽
+  名为placeholder
+
+注意
 - 不要中途去变更配置项（videoPlayerOption）  
   不保证变更后会生效
 
@@ -9,16 +14,17 @@
 - jsUtil
 
 版本
-2021.08.24 相对于2021.08.16版本来说，只是加了注释和调试代码
+2021.09.18
 
 <template>
-  <div class='SandVideo'>
+  <div class='SandVideo' :style="sizeStyle">
     <template v-if="liveVideoUrl">
-      <div v-if="isPlayFail"
-        class="liveFailReason"
-      >
-        视频加载失败
-      </div>
+      <template v-if="isPlayFail">
+        <slot v-if="$slots.placeholder" name="placeholder"></slot>
+        <div v-else class="liveFailReason">
+          视频加载失败
+        </div>
+      </template>
       <videoPlayer
         v-else
         ref="videoPlayer"
@@ -29,7 +35,7 @@
         @error="isPlayFail=true"
       />
     </template>
-    <img v-else class="coverImg" :src="coverImgSrc" :alt="isUseAlt?'封面图未取得':''">
+    <img v-else class="coverImg" :src="coverImgSrc" :alt="coverAlt">
   </div>
 </template>
 
@@ -52,9 +58,9 @@ export default {
   props:{
     liveVideoUrl:[String,Boolean],
     coverImgPath:String,
-    isUseAlt:{
-      type:Boolean,
-      default:true,
+    coverAlt:{
+      type:String,
+      default:'封面图未取得',
     },
     videoPlayerOption:{
       type:Object,
@@ -97,6 +103,16 @@ export default {
     },
     coverImgSrc(){
       return `${process.env.VUE_APP_STATIC_RESOURCE_PREFIX}${this.coverImgPath}`
+    },
+    sizeStyle(){ // 如果设置了视频尺寸，那占位图的尺寸也要保持一致
+      const style={}
+      if('width' in this.finalVideoPlayerOption){
+        style.width=this.finalVideoPlayerOption.width+'px'
+      }
+      if('height' in this.finalVideoPlayerOption){
+        style.height=this.finalVideoPlayerOption.height+'px'
+      }
+      return style
     },
   },
   mounted(){
