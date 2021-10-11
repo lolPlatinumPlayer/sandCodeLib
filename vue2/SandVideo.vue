@@ -2,6 +2,7 @@
 
 说明
 - 不传视频地址的话则只渲染封面图
+- 视频地址可以用liveVideoUrl传也可以用videoPlayerOption.sources[0].src传
 - 有提供加载失败的占位插槽
   名为placeholder
 
@@ -9,31 +10,34 @@
 - 不要中途去变更配置项（videoPlayerOption）  
   不保证变更后会生效
 
+已知bug
+- 如果一开始就进入包含该组件的页面的话  
+  不会默认播放
+
+非重点内容
+- 本组件比vue-video-player厉害的地方
+  本组件在安卓webview里可以和ng配合限制refer
+  vue-video-player限制后会播放失败（因为使用的video.js版本不够新）
+
 需要依赖
-- "vue-video-player": "^5.0.2"
 - jsUtil
+- 静态版video-js7.15.4
 
 版本
-2021.09.18
+2021.09.29
 
-<template>
+<template 不要在sn大屏里更新（因为要改.video-player，还要改依赖）>
   <div class='SandVideo' :style="sizeStyle">
-    <template v-if="liveVideoUrl">
+    <template v-if="finalVideoPlayerOption.sources[0].src">
       <template v-if="isPlayFail">
         <slot v-if="$slots.placeholder" name="placeholder"></slot>
         <div v-else class="liveFailReason">
           视频加载失败
         </div>
       </template>
-      <videoPlayer
-        v-else
-        ref="videoPlayer"
-        class="video-player vjs-custom-skin"
-        :playsinline="true"
-        :options="finalVideoPlayerOption"
-        @loadeddata="onPlayerLoadeddata($event)"
-        @error="isPlayFail=true"
-      />
+      <div v-else class="container">
+        <video ref="video" class="video-js"></video>
+      </div>
     </template>
     <img v-else class="coverImg" :src="coverImgSrc" :alt="coverAlt">
   </div>
@@ -41,17 +45,6 @@
 
 <script>
 import {mergeObj} from '@/utils/js'
-import { videoPlayer } from 'vue-video-player';
-import 'video.js/dist/video-js.css';
-
-// 为直播增加的代码
-import videojs from 'video.js'
-window.videojs = videojs // 这行也是必需的
-require('videojs-contrib-hls/dist/videojs-contrib-hls.js')
-import { Message } from 'element-ui';
-
-// Message({message:6661})
-
 
 export default {
   name: 'SandVideo',
@@ -69,18 +62,13 @@ export default {
       },
     },
   },
-  components:{
-    videoPlayer,
-  },
   data(){
     return {
       isPlayFail:null,
+      player:undefined,
     }
   },
   computed: {
-    player() {
-      return this.$refs.videoPlayer.player;
-    },
     finalVideoPlayerOption(){
       const optionBeforeMerge= {
         fluid:true,
@@ -90,10 +78,10 @@ export default {
           type: "application/x-mpegURL",
           src:this.liveVideoUrl,
         }],
-        controlBar: {
-          timeDivider: false,
-          durationDisplay: false,
-        },
+        /* controlBar: {
+          fullscreenToggle: false,
+        }, */
+        controls:true,
         flash: { hls: { withCredentials: false }},
         html5: { hls: { withCredentials: false }},
         poster: this.coverImgSrc,
@@ -112,15 +100,44 @@ export default {
       if('height' in this.finalVideoPlayerOption){
         style.height=this.finalVideoPlayerOption.height+'px'
       }
+      /* console.log('finalVideoPlayerOption:')
+      console.log(this.finalVideoPlayerOption)
+      console.log('style:')
+      console.log(style) */
       return style
     },
   },
   mounted(){
+    this.$nextTick(this.init)
+  },
+  beforeDestroy(){
+    this.player.dispose()
   },
   methods:{
+    init(){
+      // 这一块代码源自vue-video-player的playsinline prop
+      this.$refs.video.setAttribute('playsinline', this.playsinline)
+      this.$refs.video.setAttribute('webkit-playsinline', this.playsinline)
+      this.$refs.video.setAttribute('x5-playsinline', this.playsinline)
+      this.$refs.video.setAttribute('x5-video-player-type', 'h5')
+      this.$refs.video.setAttribute('x5-video-player-fullscreen', false)
+
+      const self = this
+      this.player = videojs(this.$refs.video, this.finalVideoPlayerOption, function onPlayerReady() {
+        this.on('loadeddata',()=>{
+          self.onPlayerLoadeddata(self.player)
+          self.$emit('loadeddata',self.player)
+        })
+        this.on('error',()=>{
+          self.isPlayFail=true
+          self.$emit('error',self.player)
+        })
+        this.on('ended',()=>{
+          self.$emit('ended',self.player)
+        })
+      })
+    },
     onPlayerLoadeddata(player) {
-      // alert(1)
-      // Message({message:this.finalVideoPlayerOption.autoplay})
       if(this.finalVideoPlayerOption.autoplay){
         // player.play()
       }
@@ -136,7 +153,7 @@ export default {
   justify-content: center;
   position: relative;
   min-height: 100px;
-  .video-player{
+  .container{
     flex-grow: 1;
     align-self: flex-start;
   }
@@ -149,8 +166,18 @@ export default {
     width: 100%;
     height: 100%;
   }
-  /deep/.video-js{
+}
+::v-deep{
+  .video-js{
     margin: auto;
+  }
+  .vjs-big-play-button { // 居中video.js的播放按钮
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .vjs-poster{ // 调整video.js的封面图尺寸
+    background-size: cover;
   }
 }
 </style>
