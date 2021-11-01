@@ -1,5 +1,5 @@
 /* 
-版本：2021.09.29
+版本：2021.10.18
 */
 
 // 判断对象是否为数组
@@ -30,14 +30,14 @@ export function mergeObj(origin, input) {
 /* 
 输入2个纯对象，把第二个对象比第一个对象多的属性都加到第一个对象上
 会递归（每一层的属性都会执行这个操作）
-如果第二个入参有属性是不是纯对象的话就会直接使用（不会递归数组）
+如果第二个入参有属性是不是纯对象的话就会直接深拷贝（不会递归数组）
 */
 function deepAddProperty(origin, objUsedToInsert) {
   for (const key in objUsedToInsert) {
     if ((isPureObj(objUsedToInsert[key]))&&(key in origin)) {
       deepAddProperty(origin[key], objUsedToInsert[key])
     } else {
-      origin[key] = objUsedToInsert[key]
+      origin[key] = JSON.parse(JSON.stringify(objUsedToInsert[key]))
     }
   }
 }

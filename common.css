@@ -1,0 +1,25 @@
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Microsoft YaHei, Arial, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, sans-serif;
+}
+
+.clear:after {
+  content: '';
+  display: block;
+  clear: both;
+  height: 0 !important;
+  width: 0 !important;
+  font-size: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.oneRowText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

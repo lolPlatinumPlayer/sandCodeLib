@@ -2,13 +2,14 @@
 
 说明
 - 不传视频地址的话则只渲染封面图
-- 视频地址可以用liveVideoUrl传也可以用videoPlayerOption.sources[0].src传
+- 视频地址可以用liveVideoUrl传也可以用videoPlayerOption.sources[0].src传  
+  （后者优先级更高）
 - 有提供加载失败的占位插槽
   名为placeholder
 
 注意
 - 不要中途去变更配置项（videoPlayerOption）  
-  不保证变更后会生效
+  不保证变更后会生效（播放地址除外）
 
 已知bug
 - 如果一开始就进入包含该组件的页面的话  
@@ -18,17 +19,18 @@
 - 本组件比vue-video-player厉害的地方
   本组件在安卓webview里可以和ng配合限制refer
   vue-video-player限制后会播放失败（因为使用的video.js版本不够新）
+- 可以中途变更liveVideoUrl和videoPlayerOption.sources[0].src
 
 需要依赖
-- jsUtil
+- jsUtil（版本不低于2021.10.18）
 - 静态版video-js7.15.4
 
 版本
-2021.09.29
+2021.10.18
 
-<template 不要在sn大屏里更新（因为要改.video-player，还要改依赖）>
+<template>
   <div class='SandVideo' :style="sizeStyle">
-    <template v-if="finalVideoPlayerOption.sources[0].src">
+    <template v-if="finalVideoUrl">
       <template v-if="isPlayFail">
         <slot v-if="$slots.placeholder" name="placeholder"></slot>
         <div v-else class="liveFailReason">
@@ -39,7 +41,7 @@
         <video ref="video" class="video-js"></video>
       </div>
     </template>
-    <img v-else class="coverImg" :src="coverImgSrc" :alt="coverAlt">
+    <img v-else-if="coverImgPath" class="coverImg" :src="coverImgSrc" :alt="coverAlt">
   </div>
 </template>
 
@@ -68,7 +70,18 @@ export default {
       player:undefined,
     }
   },
+  watch:{
+    liveVideoUrl(){
+      this.changeVideoUrl()
+    },
+    'videoPlayerOption.sources.0.src'(){
+      this.changeVideoUrl()
+    },
+  },
   computed: {
+    finalVideoUrl(){
+      return this.videoPlayerOption?.sources?.[0]?.src??this.liveVideoUrl
+    },
     finalVideoPlayerOption(){
       const optionBeforeMerge= {
         fluid:true,
@@ -87,6 +100,8 @@ export default {
         poster: this.coverImgSrc,
       }
       const result=mergeObj(optionBeforeMerge,this.videoPlayerOption)
+      result.sources[0].src=this.finalVideoUrl
+      // console.log('finalVideoPlayerOption',result)
       return result
     },
     coverImgSrc(){
@@ -108,14 +123,21 @@ export default {
     },
   },
   mounted(){
-    this.$nextTick(this.init)
+    this.$nextTick(this.initVideo)
   },
   beforeDestroy(){
     this.player.dispose()
   },
   methods:{
-    init(){
-      // 这一块代码源自vue-video-player的playsinline prop
+    initVideo(){
+      if(!this.finalVideoUrl){ // 如果没输入视频地址则不初始化视频
+        if(!this.coverImgPath){
+          console.error('既没输入视频地址也没输入封面图地址')
+        }
+        return
+      }
+
+      // 这一块代码源自vue-video-player的playsinline prop。vue-video-player对此的注释是“ios fullscreen”
       this.$refs.video.setAttribute('playsinline', this.playsinline)
       this.$refs.video.setAttribute('webkit-playsinline', this.playsinline)
       this.$refs.video.setAttribute('x5-playsinline', this.playsinline)
@@ -136,6 +158,16 @@ export default {
           self.$emit('ended',self.player)
         })
       })
+    },
+    changeVideoUrl(){
+      if(this.player){
+        this.player.src(this.finalVideoUrl)
+      }else{
+        this.$nextTick(()=>{
+          this.initVideo()
+          this.player.src(this.finalVideoUrl)
+        })
+      }
     },
     onPlayerLoadeddata(player) {
       if(this.finalVideoPlayerOption.autoplay){
