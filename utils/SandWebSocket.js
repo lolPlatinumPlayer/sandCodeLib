@@ -1,4 +1,8 @@
 /* 
+说明
+- 支持uniapp
+
+注意事项
 - url前面要带斜杆————“/”
 - url结尾不能带斜杆
 
@@ -8,16 +12,87 @@ bug
   - bug出现背景：一次从有网切到没网，并过了一段时间后
   - 猜测的原因：ws对js同步代码的响应有可能和js执行顺序不一致
 
+版本：0.1.1 2021.11.04
 */
+
+/* 
+在uniapp中实现浏览器的EventTarget类
+不具有EventTarget类的完整功能，只具有SandWebSocket所需的功能
+*/
+class BrowserEventTarget{
+  eventCallbackDict={}
+  addEventListener(eventName,callback){
+    if(eventName in this.eventCallbackDict){
+      this.eventCallbackDict[eventName].add(callback)
+    }else{
+      this.eventCallbackDict[eventName]=new Set([callback])
+    }
+  }
+  removeEventListener(eventName,callback){
+    if(eventName in this.eventCallbackDict){
+      this.eventCallbackDict[eventName].delete(callback)
+    }
+  }
+  dispatchEvent(event,param){
+    const {eventName}=event
+    if(eventName in this.eventCallbackDict){
+      for (let callback of this.eventCallbackDict[eventName]){
+        callback(param)
+      }
+    }
+  }
+}
+const EventTarget=window?.EventTarget??BrowserEventTarget
+function BrowserCustomEvent(eventName){
+  this.eventName=eventName
+}
+const CustomEvent=window?.CustomEvent??BrowserCustomEvent
+
+/* 
+在uniapp中实现浏览器的WebSocket类
+不具有WebSocket类的完整功能，只具有SandWebSocket所需的功能
+*/
+class BrowserWebSocket extends BrowserEventTarget{
+  _socketTask
+  constructor(url){
+    super()
+    this._socketTask = uni.connectSocket({
+      url,
+      success(...x) {
+        console.log("connectSocket调用成功", x);
+      },
+      fail(...x) {
+        console.log("connectSocket调用失败", x);
+      },
+    });
+    this._socketTask.onClose(()=>{
+      this.dispatchEvent(new CustomEvent('close'))
+    })
+    this._socketTask.onMessage((p)=>{
+      this.dispatchEvent(new CustomEvent('message'),{data:p.data})
+    })
+    this._socketTask.onOpen(()=>{
+      this.dispatchEvent(new CustomEvent('open'))
+    })
+  }
+  send(msg){
+    this._socketTask.send({data:msg})
+  }
+  close(){
+    this._socketTask.close()
+  }
+}
+const WebSocket=window?.WebSocket??BrowserWebSocket
+
 const randomNumber=Math.ceil(Math.random()*1e6) // 应对服务端接到同路径ws后会不响应之前ws的情况
 export default class SandWebSocket{
   ws
   isClose
   queryAlive
   listener
-  constructor({apiPath,basePath=process.env.VUE_APP_WSS_BASE}){
+  constructor({apiPath,basePath=process?.env?.VUE_APP_WSS_BASE||''}){
     const lastPathElement=apiPath.split('/').slice(-1)[0]
-    this.wsUrl=`${basePath}${apiPath}/${lastPathElement}${randomNumber}`
+    this.wsUrl=`${basePath}${apiPath}/${lastPathElement}${randomNumber}` // 多加一个lastPathElement方便在network(调试工具)里查看
     console.log('初始化ws：',this.wsUrl)
     this._createWs()
   }
