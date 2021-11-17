@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- <meta name="viewport" content="width=device-width,initial-scale=0.6"> -->
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico?a=1">
+  
+  <!-- 手机端开发的 -->
+<!--  <meta name="viewport" content="width=device-width,initial-scale=0.3, minimum-scale=0.3, maximum-scale=0.3, user-scalable=yes" />-->
+  <!-- 手机端用listener函数的 -->
+  <!-- <meta name="viewport" content="initial-scale=0.32, minimum-scale=0.32, maximum-scale=0.32, user-scalable=yes" /> -->
+  <!-- DH智慧平板的 -->
+   <meta name="viewport" content="width=device-width,initial-scale=0.66, minimum-scale=0.66, maximum-scale=0.66, user-scalable=no" />
+
+  <!--<script src="https://unpkg.com/vconsole/dist/vconsole.min.js"></script>
+  <script>
+    // VConsole 默认会挂载到 `window.VConsole` 上
+    var vConsole = new window.VConsole();
+  </script>-->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.0.2/dist/echarts.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script> -->
+  <!-- <script src="https://echarts.baidu.com/resource/echarts-liquidfill-latest/dist/echarts-liquidfill.min.js"></script> -->
+  
+  <title> <%= htmlWebpackPlugin.options.title %> </title>
+</head>
+<body>
+  <noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+  <script>
+    /* listener()
+    function listener() {
+      // return
+      var clientW = document.documentElement.clientWidth
+      var clientH = document.documentElement.clientHeight
+      var originMeta = document.getElementsByTagName('meta')[2]
+      var isWider = clientW / 1920 > clientH / 1080
+      var expectantScale = isWider ? clientH / 1080:clientW / 1920 
+      var realScale=Math.round(expectantScale*100)/100
+      var newMeta=document.createElement('meta')
+      newMeta.name='viewport'
+      newMeta.content = "width=device-width,initial-scale="+realScale+", minimum-scale="+realScale+", maximum-scale="+realScale+", user-scalable=yes"
+      originMeta.remove()
+      document.head.appendChild(newMeta)
+       alert('宽：'+clientW)
+      alert('高：'+clientH)
+      alert('scale：'+realScale)
+      console.log('scale：',realScale)
+      console.log('宽',clientW)
+      console.log('高',clientH)
+      console.log('宽高比差距',clientW / 1920-clientH / 1080)
+    } */
+    // window.addEventListener('resize', listener)
+  </script>
+</body>
+</html>
