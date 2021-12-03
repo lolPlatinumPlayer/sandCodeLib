@@ -1,9 +1,10 @@
 功能：列表排序
+uniapp可用
 
 注意
 - 后期变更list（prop）是无效的
 
-版本：0.0.0 2021.11.11
+版本：0.0.1 2021.11.22
 
 <template>
   <div class='SortBar'>

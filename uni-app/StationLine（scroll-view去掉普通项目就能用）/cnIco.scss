@@ -1,0 +1,20 @@
+.cnIco {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 4rpx;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  transform: scale(0.5);
+  &.green {
+    background: #61c68e;
+  }
+  &.lightBlue {
+    background: rgba(156, 191, 255, 1);
+  }
+  &.orange {
+    background: rgba(255, 118, 33, 1);
+  }
+}

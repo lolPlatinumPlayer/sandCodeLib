@@ -19,13 +19,15 @@
   本组件在安卓webview里可以和ng配合限制refer
   vue-video-player限制后会播放失败（因为使用的video.js版本不够新）
 - 可以中途变更liveVideoUrl和videoPlayerOption.sources[0].src
+- 可在iPhone的qq浏览器下保持自我  
+  qq浏览器除了会给普通视频加广告外，在iPhone下还有很多bug
 
 需要依赖
 - jsUtil（版本不低于2021.10.18）
 - 静态版video-js7.15.4
 
 版本
-1.0.0 2021.10.18
+1.1.0 2021.10.18
 1版本和0版本的区别：1版本不需要依赖vue-video-player
 
 <template>
@@ -47,6 +49,9 @@
 
 <script>
 import {mergeObj} from '@/utils/js'
+
+const isQQBrowser= navigator.userAgent.toLowerCase().toString().indexOf('qqbrowser') > -1
+console.log('isQQBrowser',isQQBrowser)
 
 export default {
   name: 'SandVideo',
@@ -72,10 +77,10 @@ export default {
   },
   watch:{
     liveVideoUrl(){
-      this.changeVideoUrl()
+      this._changeVideoUrl()
     },
     'videoPlayerOption.sources.0.src'(){
-      this.changeVideoUrl()
+      this._changeVideoUrl()
     },
   },
   computed: {
@@ -123,13 +128,13 @@ export default {
     },
   },
   mounted(){
-    this.$nextTick(this.initVideo)
+    this.$nextTick(this._initVideo)
   },
   beforeDestroy(){
     this.player.dispose()
   },
   methods:{
-    initVideo(){
+    _initVideo(){
       if(!this.finalVideoUrl){ // 如果没输入视频地址则不初始化视频
         if(!this.coverImgPath){
           console.error('既没输入视频地址也没输入封面图地址')
@@ -146,8 +151,10 @@ export default {
 
       const self = this
       this.player = videojs(this.$refs.video, this.finalVideoPlayerOption, function onPlayerReady() {
+        self._removeSrcInQQBrowser()
         this.on('loadeddata',()=>{
-          self.onPlayerLoadeddata(self.player)
+          console.log('loadeddata')
+          self._onPlayerLoadeddata(self.player)
           self.$emit('loadeddata',self.player)
         })
         this.on('error',()=>{
@@ -155,23 +162,35 @@ export default {
           self.$emit('error',self.player)
         })
         this.on('ended',()=>{
+          console.log('ended')
           self.$emit('ended',self.player)
         })
       })
     },
-    changeVideoUrl(){
+    _changeVideoUrl(){
+      console.log('_changeVideoUrl')
       if(this.player){
         this.player.src(this.finalVideoUrl)
+        this.$nextTick(this._removeSrcInQQBrowser)
+        setTimeout(()=>{
+          this._removeSrcInQQBrowser()
+        },500) // 暂未找到添加src后的事件
       }else{
         this.$nextTick(()=>{
-          this.initVideo()
+          this._initVideo()
           this.player.src(this.finalVideoUrl)
         })
       }
     },
-    onPlayerLoadeddata(player) {
+    _onPlayerLoadeddata(player) {
       if(this.finalVideoPlayerOption.autoplay){
         // player.play()
+      }
+    },
+    _removeSrcInQQBrowser(){
+      if(isQQBrowser){
+        const videoTag=this.player.$('video')
+        videoTag.removeAttribute('src')
       }
     },
   },

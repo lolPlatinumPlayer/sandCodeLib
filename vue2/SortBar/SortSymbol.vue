@@ -35,10 +35,10 @@ export default {
 <style lang='scss' scoped>
 .SortSymbol{
   $size:8rpx;
-  &.up .top{
+  &.up i.top{
     border-bottom-color: #3671E2;
   }
-  &.down .bottom{
+  &.down i.bottom{
     border-top-color: #3671E2;
   }
   i{

@@ -12,7 +12,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source()
 
-let emitter = axios.create({
+const emitter = axios.create({
     baseURL:process.env.NODE_ENV==='production'?process.env.VUE_APP_BASE_API:'', 
     // baseURL:process.env.VUE_APP_BASE_API, 
     timeout: 30000 // request timeout

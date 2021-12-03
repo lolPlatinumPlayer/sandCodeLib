@@ -1,4 +1,10 @@
-版本：0.0.0 2021.11.16
+版本：0.0.1 2021.11.18
+
+注意
+- 不要用flex-grow给本组件布局又不上width或height（水平布局就要上width）  
+  否则会出现『绘制图表比占用空间小』的问题  
+  这个问题其实和本组件没关系  
+  但凡对echarts图表进行这种布局都会出现该问题（echarts出现这情况没毛病，出问题的是布局的人）
 
 <template>
   <div class="ChartWithDataStatus" v-loading="chartData==='数据加载中'">
@@ -18,16 +24,19 @@ const chartWithDataStatusMixin ={
     }
   },
   watch: {
-    chartData(chartData) {
-      if (isArr(chartData)||typeof chartData==='object') {
-        this.tryDrawTime++
-        if (this.tryDrawTime === 1) {
-          this.$nextTick(this.draw)
-          window.addEventListener('resize', this.draw)
-        }else{
-          this.draw()
+    chartData:{
+      handler(chartData) {
+        if (isArr(chartData)||typeof chartData==='object') {
+          this.tryDrawTime++
+          if (this.tryDrawTime === 1) {
+            this.$nextTick(this.draw)
+            window.addEventListener('resize', this.draw)
+          }else{
+            this.draw()
+          }
         }
-      }
+      },
+      immediate:true,
     },
   },
   beforeDestroy() {
@@ -67,7 +76,9 @@ export default {
     timeInterval:{
       type:Number,
       default:10*1000,
-    }
+    },
+    // 传入echarts.init的配置
+    initConfig:Object,
   },
   mixins: [chartWithDataStatusMixin],
   /* 
@@ -96,7 +107,7 @@ export default {
   methods: {
     draw() {
       if(this.echartsInstance===null){
-        this.echartsInstance = echarts.init(this.$refs.chartContainer, 'dark');
+        this.echartsInstance = echarts.init(this.$refs.chartContainer, 'dark',this.initConfig);
       }
       this.echartsInstance.setOption(this.getOption(this));
       this.echartsInstance.resize();

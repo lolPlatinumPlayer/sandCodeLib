@@ -1,0 +1,125 @@
+
+.Calendar{
+  @day-name-color:rgb(142,142,142);
+  @padding-bottom:12px;
+  padding-top:24px;
+  padding-bottom:48px - @padding-bottom;
+  @arrow-gut:30px;
+  background-color: rgb(244,248,255);
+  border-radius: 30px 30px 0 0;
+  &.day-type,&.month-type{
+    .touch-move-item-list{
+      .touch-move-item{
+        &.cannotClick{
+          opacity: .5;
+        }
+      }
+    }
+  }
+  &.day-type,&.week-type{
+    .header{
+      margin-bottom:45px;
+    }
+  }
+  &.month-type{
+    .header{
+      margin-bottom:10px;
+    }
+    .touch-move-item-list{
+      .item-val{
+        display: flex;
+        align-items: center;justify-content: center;
+        white-space: nowrap;word-spacing: -20px;
+        .month-unit{
+          display: inline-block;
+          font-size: .7em;
+        }
+      }
+    }
+  }
+  .header{
+    display:flex;
+    align-items:center;
+    margin-bottom: 0;
+    .text-area{
+      flex:1;
+      display: flex;
+      align-items: center;
+      .leftText,.rightText{
+        flex-shrink: 0;
+        font-size:30px;
+        color: gray;
+        padding: 0 20px;
+        &.useless{
+          opacity: .4;
+        }
+      }
+      .leftText{
+        text-align: left;
+      }
+      .rightText{
+        text-align: right;
+      }
+      .centerText{
+        flex-grow: 1;
+        text-align:center;
+        font-size:32px;
+        color: #007DFF;
+        font-weight: 600;
+      }
+    }
+    .arrow{
+      font-size:32px;
+      line-height:1;
+      color: #b4b4b4;
+      &.useless{
+        opacity: .3;
+      }
+    }
+    .arrow-left{
+      margin-left:@arrow-gut;
+    }
+    .arrow-right{
+      margin-right:@arrow-gut;
+    }
+  }
+  .touch-move-item-list{
+    display: flex;
+    padding: 0 20px;
+    .touch-move-item{
+      position: relative;
+      flex-grow: 1;
+      text-align: center;
+      &.selected{
+        .item-val{
+          color:white;
+          background:#3680FD;
+        }
+      }
+      &.notInSelectedParent{
+      }
+      .name-in-week{
+        font-size:24px;
+        color:rgb(142,142,142);
+
+      }
+      .item-val{
+        font-size:28px;
+        color:rgb(112,111,114);
+        width:58px;
+        height:58px;
+        margin:  22px auto 0;
+        border-radius:50%;
+        background:none;
+        line-height:64px;
+      }
+      .dot{
+        background:#3690FD;
+        width:8px;
+        height:8px;
+        margin: 12px auto 0;
+        border-radius:4px;
+      }
+    }
+  }
+}

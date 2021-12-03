@@ -1,9 +1,7 @@
 .DS_Store
 node_modules
 git忽略文件夹
-public/3dxd
 /dist
-package-lock.json
 测试包与正式包
 
 # local env files

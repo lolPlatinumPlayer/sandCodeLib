@@ -4,7 +4,7 @@
     后续变更无效
   - backEndPath
 
-版本：0.0.0 2021.11.12
+版本：0.0.1 2021.11.17
 
 <template>
   <div class="FileList">
@@ -46,10 +46,10 @@
           </template>
         </span>
       </div>
-      <div class="secondRow">
+      <!-- <div class="secondRow">
         <i></i>
         <div class="text">暂不支持查看该格式附件，请转至公众号查看</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -118,6 +118,7 @@ export default {
     download(item) {
       const { backEndPath } = item;
       const downloadUrl = this.fileUrlPrefix + backEndPath; // 谢新说和查看接口图片的前缀一致 2021.09.09am
+      console.log('下载地址：',downloadUrl)
 
       // #ifdef H5
       window.open(downloadUrl, "_blank ");
@@ -128,7 +129,7 @@ export default {
       const downloadTask = uni.downloadFile({
         url: downloadUrl,
         success: (res) => {
-          if (res.statusCode === 200) {
+          if (res.statusCode === 200) { // 官网对statusCode的解释：开发者服务器返回的HTTP状态码
             const { tempFilePath } = res;
             console.log("下载成功", tempFilePath);
             item.localPath = tempFilePath;
@@ -154,11 +155,13 @@ export default {
               },
             });
           } else {
-            item.status = "下载失败";
+            console.log("success 的下载失败",res);
+            item.downloadStatus = "下载失败";
           }
         },
-        fail: () => {
-          item.status = "下载失败";
+        fail: (res) => {
+          console.log("fail 的下载失败",res);
+          item.downloadStatus = "下载失败";
         },
       });
       downloadTask.onProgressUpdate((res) => {

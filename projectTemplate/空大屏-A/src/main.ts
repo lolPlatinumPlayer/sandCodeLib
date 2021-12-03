@@ -2,10 +2,15 @@ import Vue from 'vue'
 import App from './App.vue'
 import less from 'less'
 // import 'amfe-flexible'
-import { Carousel,CarouselItem,Option,Cascader,Loading ,Form,FormItem,Input, Button,Image,} from 'element-ui';
 import scroll from 'vue-seamless-scroll'
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import OverlayScrollbars from 'overlayscrollbars'
+import importVant from '@/assets/minimalImport/vant'
+import importEcharts from '@/assets/minimalImport/echarts'
+import importElement from '@/assets/minimalImport/element'
+importVant()
+importEcharts()
+importElement()
 
 console.log('process.env.NODE_ENV',process.env.NODE_ENV)
 
@@ -27,17 +32,6 @@ Vue.use(scroll)
 Vue.use(scroll,{componentName: 'scroll-seamless'})
 // Vue.use(less)
 
-// elementUI
-Vue.use(Carousel)
-Vue.use(CarouselItem)
-Vue.use(Option)
-Vue.use(Cascader)
-Vue.use(Loading)
-Vue.use(Form)
-Vue.use(FormItem)
-Vue.use(Input)
-Vue.use(Button)
-Vue.use(Image)
 
 Vue.prototype.$emptyTip=function(originVal:any){
   const tip='暂无'
