@@ -1,15 +1,16 @@
-版本：0.0.1 2021.11.18
+版本：0.0.3 2021.12.07
 
 注意
 - 不要用flex-grow给本组件布局又不上width或height（水平布局就要上width）  
   否则会出现『绘制图表比占用空间小』的问题  
   这个问题其实和本组件没关系  
-  但凡对echarts图表进行这种布局都会出现该问题（echarts出现这情况没毛病，出问题的是布局的人）
+  但凡对echarts图表进行这种布局都会出现该问题（echarts出现这情况也没毛病，出问题的是布局的人）
 
 <template>
   <div class="ChartWithDataStatus" v-loading="chartData==='数据加载中'">
     <div class="chartContainer" ref="chartContainer"></div>
     <div class="loadFail" v-if="chartData==='数据加载失败'">数据加载失败</div>
+    <div class="loadFail" v-if="chartData==='暂无数据'">暂无数据</div>
   </div>
 </template>
 
@@ -53,12 +54,13 @@ export default {
     字符串枚举值如下
     - '数据加载中'
     - '数据加载失败'
+    - '暂无数据'
     */
     chartData: [String,Array,Object],
 
     getOption:{
       type:Function,
-      require:true,
+      required:true,
     },
     /* 
     是否使用『初始动画模式』
@@ -79,6 +81,11 @@ export default {
     },
     // 传入echarts.init的配置
     initConfig:Object,
+    // echarts的主题（详见：https://echarts.apache.org/handbook/zh/concepts/style/）
+    // 要用echarts默认值的话随便传个非法值就行，建议传字符串：'default'
+    theme:{
+      default:'dark',
+    }
   },
   mixins: [chartWithDataStatusMixin],
   /* 
@@ -107,7 +114,7 @@ export default {
   methods: {
     draw() {
       if(this.echartsInstance===null){
-        this.echartsInstance = echarts.init(this.$refs.chartContainer, 'dark',this.initConfig);
+        this.echartsInstance = echarts.init(this.$refs.chartContainer, this.theme,this.initConfig);
       }
       this.echartsInstance.setOption(this.getOption(this));
       this.echartsInstance.resize();
@@ -121,7 +128,7 @@ export default {
 
 </script>
 
-<style lang="less">
+<style lang="scss">
 .ChartWithDataStatus{
   position: relative;
   display:flex;

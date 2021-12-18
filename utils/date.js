@@ -1,3 +1,7 @@
+/* 
+版本：0.0.1 2021.12.08
+*/
+
 export const ONE_DAY_MILLISECONDS=86400000
 export const DAY_NAME_IN_WEEK_LIST=['一','二','三','四','五','六','日',]
 
@@ -130,14 +134,29 @@ function getDayCountOfMonth(year,month) {
 }
 
 /*
+* 输入Date实例
+* 获得这天的起始
+* */
+export function getBeginOfDate(date){
+  const year=date.getFullYear()
+  const monthIdx=date.getMonth()
+  const day=date.getDate()
+  const beginOfToday=new Date(year,monthIdx,day)
+  return beginOfToday
+}
+
+/*
+* 获得今天的起始
+* */
+export function getBeginOfToday(){
+  return getBeginOfDate(new Date())
+}
+
+/*
 * 获得明天的起始
 * */
 export function getBeginOfTomorrow(){
-  const currentDate = new Date();
-  const year=currentDate.getFullYear()
-  const monthIdx=currentDate.getMonth()
-  const day=currentDate.getDate()
-  const beginOfToday=new Date(year,monthIdx,day)
+  const beginOfToday=getBeginOfToday()
   const beginOfTomorrow=new Date(beginOfToday.getTime()+ONE_DAY_MILLISECONDS)
   return beginOfTomorrow
 }

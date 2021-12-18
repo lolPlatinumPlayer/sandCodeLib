@@ -8,7 +8,7 @@
 - 默认有“全部”这个选项  
   不想要的话可以把isShowAllOption设为false
 
-版本：0.0.0 2021.10.22
+版本：0.0.1 2021.12.07
 <template>
   <div v-if="status==='加载失败'" class="DictDropdown fail">
     加载失败
@@ -42,7 +42,7 @@ export default {
     value:{},
     code:{
       type:String,
-      require:true,
+      required:true,
     },
     isShowAllOption:{
       type:Boolean,

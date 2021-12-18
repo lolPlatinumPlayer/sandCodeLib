@@ -5,6 +5,10 @@ import less from 'less'
 import scroll from 'vue-seamless-scroll'
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import OverlayScrollbars from 'overlayscrollbars'
+
+import {beFlexible} from "@/utils/flexible";
+beFlexible()
+
 import importVant from '@/assets/minimalImport/vant'
 import importEcharts from '@/assets/minimalImport/echarts'
 import importElement from '@/assets/minimalImport/element'
