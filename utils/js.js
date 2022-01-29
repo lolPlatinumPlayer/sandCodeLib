@@ -1,5 +1,6 @@
 /* 
-版本：2021.10.18
+版本：0.1.0 2022.01.21
+深拷贝还是用lodash的好
 */
 
 // 判断对象是否为数组
@@ -45,4 +46,30 @@ function deepAddProperty(origin, objUsedToInsert) {
 // 判断是否是纯对象
 export function isPureObj(o) {
   return Object.prototype.toString.call(o) === '[object Object]'
+}
+
+// 加强版数组（补足数组和Set的不足）
+export class ArrPlus extends Array{
+  delete(inputItem){ // 在数组中去掉该元素（不管占了多少个位置都会去掉）
+    for(let i=this.length-1;i>=0;i--){
+      if(this[i]===inputItem){
+        this.splice(i,1)
+      }
+    }
+    return this
+  }
+  getLastOne(){
+    return this[this.length-1]
+  }
+}
+
+// 获得由对象的键组成的数组（不含原型链上的键）
+export function getObjKeyList(obj) {
+  const result = []
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result.push(key)
+    }
+  }
+  return result
 }

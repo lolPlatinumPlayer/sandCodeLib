@@ -1,0 +1,105 @@
+.login {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .bg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .content{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 26px 26px;
+    position: relative;
+    .imgTitleBox{
+      position: relative;
+      // height: 1px;
+      // width: 300px;
+      // background-color: rebeccapurple;
+      height: 23%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .imgTitle{
+        // position: absolute;
+        // left: 0;top: 0;
+        // height: 111px;
+        // height: 55%;
+        // max-height: 5%;
+        width: 46%;
+      }
+    }
+    .form{
+      height: 77%;
+      background-color: white;
+      border-radius: 21px;
+      padding: 50px;
+      .formItem{
+        margin-bottom: 50px;
+        .el-form-item__label{
+          color: white;
+        }
+      }
+      .btn{
+        // width: 85%;
+        height: 100px;
+        border-radius: 50px;
+        line-height: 100px;
+        padding: 0;
+        margin:86px auto 0;
+        background: #E52317;
+        font-size: 36px;
+        color: white;
+        letter-spacing: 3px;
+        text-align: center;
+      }
+      .el-input{
+        .el-input__prefix .el-input__icon{
+          color: #333333;
+          font-size: 36px;
+        }
+        input{
+          padding-left: 86px;
+          border-width: 0 0 1px 0;
+          border-radius: 0;
+          border-color: #E4E7EA;
+          box-shadow: 0 0 0px 1000px white inset !important;
+        }
+      }
+      // 验证码
+      .el-input-group__append{
+        padding: 0;
+        border-width: 0 0 1px;
+        background-color:transparent;
+        .verificationCodeBox{
+          height: 100%;
+          cursor: pointer;
+          .verificationCodeImg{
+            width: 180px;
+            height: 100%;
+          }
+          .status{
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            user-select: none;
+          }
+        }
+      }
+    }
+    .imgTitleBox,.form{
+      flex-grow: 1;
+      position: relative;
+      // overflow: hidden;
+    }
+  }
+
+  // 重置组件样式
+  .el-form-item__content{
+    line-height: 0;
+  }
+}

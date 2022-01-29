@@ -5,6 +5,7 @@ import less from 'less'
 import scroll from 'vue-seamless-scroll'
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import OverlayScrollbars from 'overlayscrollbars'
+import router from './route/router'
 
 import {beFlexible} from "@/utils/flexible";
 beFlexible()
@@ -50,4 +51,5 @@ Vue.config.productionTip = false
 
 window.basicComponent=new Vue({
   render: h => h(App),
+  router,
 }).$mount('#app')

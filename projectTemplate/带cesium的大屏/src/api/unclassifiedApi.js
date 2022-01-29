@@ -1,5 +1,7 @@
 
-import emitter from '@/utils/emitter/emitter';
+import emitter from '@/api/emitter/emitter';
+
+debugger
 
 // 获得路由数据
 export function getBackEndRouteData(){

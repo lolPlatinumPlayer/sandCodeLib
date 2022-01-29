@@ -128,7 +128,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="less">
 .ChartWithDataStatus{
   position: relative;
   display:flex;
