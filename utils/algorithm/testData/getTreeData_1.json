@@ -1,0 +1,74 @@
+[
+  {
+    "id": "0102",
+    "name": "耕地资源",
+    "parentId": "01",
+    "formType": "1",
+    "root": false,
+    "leaf": false,
+    "searchKeyWord": null,
+    "layer": "",
+    "children": [
+      {
+        "id": "010201",
+        "name": "测试111",
+        "parentId": "0102",
+        "formType": "1",
+        "root": false,
+        "leaf": false,
+        "searchKeyWord": "key1,key",
+        "layer": "",
+        "children": [
+          {
+            "id": "e11d40fe296b4f25b5ac2440908ee10b",
+            "name": "资源2",
+            "parentId": "010201",
+            "formType": "",
+            "root": false,
+            "leaf": true,
+            "searchKeyWord": "",
+            "layer": "https://snxxdwd.fjhrt.com/20220217/65a34f5709904d07b52240e1d0663c21.geojson",
+            "children": [],
+            "site": "测试地址1",
+            "areaNo": "010201",
+            "cssType": "01"
+          },
+          {
+            "id": "e11d40fe296b4f25b5ac2440908ee90b",
+            "name": "资源1",
+            "parentId": "010201",
+            "formType": "",
+            "root": false,
+            "leaf": true,
+            "searchKeyWord": "",
+            "layer": "https://snxxdwd.fjhrt.com/20220217/256df914eb7b471e80a52bd0c90d907a.geojson",
+            "children": [],
+            "site": "测试地址2",
+            "areaNo": "010201",
+            "cssType": "01"
+          }
+        ],
+        "site": "",
+        "areaNo": "",
+        "cssType": ""
+      }
+    ],
+    "site": "",
+    "areaNo": "",
+    "cssType": ""
+  },
+  {
+    "id": "0103",
+    "name": "耕地资源下的分类",
+    "parentId": "01",
+    "formType": null,
+    "root": false,
+    "leaf": false,
+    "searchKeyWord": null,
+    "layer": "",
+    "children": [],
+    "site": "",
+    "areaNo": "",
+    "cssType": ""
+  }
+]

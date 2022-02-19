@@ -1,31 +1,31 @@
 
 // 功能性页面
-const funcPage=[
-  { 
-    name:'aaaaa',
-    path: '/aaaaa',
-    component: () =>import("@/view/page/aaaaa/aaaaa.vue"),
-    meta:{
-      showAvatar:true,
-      useBanner:true,
-      bannerText:'aaaaa',
-      bannerBgColor:'white',
-      useBottomNav:true,
+const funcPage = [
+  {
+    name: "aaaaa",
+    path: "/aaaaa",
+    component: () => import("@/view/business/aaaaa/aaaaa.vue"),
+    meta: {
+      showAvatar: true,
+      useBanner: true,
+      bannerText: "aaaaa",
+      bannerBgColor: "white",
+      useBottomNav: true,
     },
   },
-  { 
-    name:'bbbb',
-    path: '/bbbb',
-    component: () =>import("@/view/page/bbbb/bbbb.vue"),
-    meta:{
-      showAvatar:true,
-      useBanner:true,
-      bannerText:'bbbb',
-      bannerBgColor:'white',
-      useBottomNav:true,
+  {
+    name: "bbbb",
+    path: "/bbbb",
+    component: () => import("@/view/business/bbbb/bbbb.vue"),
+    meta: {
+      showAvatar: true,
+      useBanner: true,
+      bannerText: "bbbb",
+      bannerBgColor: "white",
+      useBottomNav: true,
     },
   },
-]
+];
 
 // 系统类页面
 const systemPage=[

@@ -11,7 +11,7 @@ import mainstay from './view/mainstay'
 import login from './view/system/login/login'
 import bus from './bus'
 import {getUserInfo} from './auth'
-import cz from './view/cz/cz'
+import cz from './cz'
 
 export default {
   name: 'App',

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import mapCenter from './mapCenter'
+import mapCenter from '../cz/mapCenter'
 
 export default {
   name: 'cz',
