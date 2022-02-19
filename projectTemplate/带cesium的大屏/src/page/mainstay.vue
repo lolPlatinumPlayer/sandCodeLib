@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import avatar from '../view/system/avatar.vue'
+import avatar from '../page/system/avatar.vue'
 import Dialog  from 'vant/lib/dialog';
 
 export default {

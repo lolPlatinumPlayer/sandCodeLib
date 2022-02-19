@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import mainstay from './view/mainstay'
-import login from './view/system/login/login'
+import mainstay from './page/mainstay'
+import login from './page/system/login/login'
 import bus from './bus'
 import {getUserInfo} from './auth'
 import cz from './cz'
