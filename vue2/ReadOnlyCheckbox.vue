@@ -4,6 +4,13 @@
 不具有交互能力的勾选框
 目前只是从elementUI里复制过来稍作修改，是有很多多余代码的
 
+问题
+- 如果pointer-events: none;放开的话
+  第一个span上的点击事件会触发2次，这个是elementUI就有的问题。click.prevent可以解决这个问题
+
+感觉这个版本可以废弃了
+如果要只读的话，其实只要禁用掉会修改v-model的js就行了
+
 版本：0.0.0 2021.12.07
 
 <template>
